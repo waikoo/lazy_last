@@ -1,11 +1,51 @@
 return {
   {
     'LunarVim/lunar.nvim',
-    -- priority = 1000,
-    -- config = function()
-    --   vim.cmd.colorscheme 'lunar'
-    -- end,
+    priority = 1000,
+    config = function()
+      -- vim.api.nvim_set_hl(0, "@css_classname", { fg = "#ec82f2" })
+      -- vim.api.nvim_set_hl(0, "@css_plain_value", { fg = "#ea8346" })
+      --
+      -- -- javascript
+      -- vim.api.nvim_set_hl(0, "@method.call", { fg = "#7aa2f7", bg = nil })
+      -- vim.api.nvim_set_hl(0, "function", { fg = "#edd15b", bg = nil })
+      -- vim.api.nvim_set_hl(0, "@operator", { fg = "#FFFFFF", bg = nil })
+      -- vim.api.nvim_set_hl(0, "@parameter", { fg = "#ff8e64", bg = nil })
+      -- vim.api.nvim_set_hl(0, "@include", { fg = "#cb7df2", bg = nil })
+      -- vim.api.nvim_set_hl(0, "NvimTreeDiagnosticError", { fg = "#cc5555", bg = nil })
+      -- vim.api.nvim_set_hl(0, "BufferCurrent", { fg = "#fbd05a", bg = nil })
+      -- vim.api.nvim_set_hl(0, "BufferCurrentSign", { bg = nil })
+      -- vim.api.nvim_set_hl(0, "BufferTabpageFill", { bg = nil })
+      vim.cmd.colorscheme 'lunar'
+    end,
   },
+  {
+    "michaelb/sniprun",
+    branch = "master",
+
+    build = "sh install.sh",
+    -- do 'sh install.sh 1' if you want to force compile locally
+    -- (instead of fetching a binary from the github release). Requires Rust >= 1.65
+
+    config = function()
+      require("sniprun").setup({
+        selected_interpreters = { "JS_TS_deno" },
+        repl_enable = { "JS_TS_deno" }
+      })
+    end,
+  },
+  'RRethy/vim-illuminate',
+  {
+    'gelguy/wilder.nvim',
+  },
+  {
+    'vuki656/package-info.nvim',
+    dependencies = 'MunifTanjim/nui.nvim',
+    config = function()
+      require('package-info').setup()
+    end
+  },
+  'uga-rosa/ccc.nvim',
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
@@ -22,7 +62,15 @@ return {
   'hrsh7th/cmp-buffer',
   'folke/trouble.nvim',
   'rcarriga/nvim-notify',
-  'theprimeagen/harpoon',
+  {
+    'theprimeagen/harpoon',
+    config = function()
+      require("harpoon").setup({
+        save_on_toggle = true,
+        tabline = true,
+      })
+    end
+  },
   'nvim-telescope/telescope-ui-select.nvim',
   'nvim-telescope/telescope-media-files.nvim',
   'nvim-lua/popup.nvim',
@@ -30,12 +78,15 @@ return {
   'unblevable/quick-scope',
   "lukas-reineke/indent-blankline.nvim",
   'junegunn/fzf.vim',
-  "folke/flash.nvim",
-  'tpope/vim-obsession',
   'christoomey/vim-tmux-navigator',
   'romgrk/barbar.nvim',
 
-  "napmn/react-extract.nvim",
+  {
+    "napmn/react-extract.nvim",
+    config = function()
+      require("react-extract").setup()
+    end
+  },
   'machakann/vim-sandwich',
   'AndrewRadev/splitjoin.vim',
   { 'kevinhwang91/nvim-bqf', ft = 'qf' },
@@ -96,7 +147,14 @@ return {
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
-
+      { 'roobert/tailwindcss-colorizer-cmp.nvim', config = true },
+      opts = function(_, opts)
+        local format_kinds = opts.formatting.format
+        opts.formatting.format = function(entry, item)
+          format_kinds(entry, item)
+          return require("tailwindcss-rolorizer-cmp").formatter(entry, item)
+        end
+      end,
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
 
@@ -106,7 +164,37 @@ return {
   },
   {
     'stevearc/dressing.nvim',
-    opts = {},
+    opts = {
+      input = {
+        enabled = true
+      }
+    },
+    -- config = function()
+    --   require('dressing').setup()
+    -- end
+  },
+  {
+    'folke/todo-comments.nvim',
+    dependencies = 'nvim-lua/plenary.nvim',
+    config = function()
+      require('todo-comments').setup()
+    end
+  },
+  {
+    {
+      'folke/trouble.nvim',
+      dependencies = { 'nvim-tree/nvim-web-devicons' },
+      opts = {
+
+      }
+    },
+  },
+  {
+    "SmiteshP/nvim-navic",
+    dependencies =
+    "neovim/nvim-lspconfig",
+    "SmiteshP/nvim-navbuddy"
+
   },
   {
     'Exafunction/codeium.vim',
@@ -124,17 +212,25 @@ return {
       vim.g.codeium_enabled = true
     end
   },
-  'zhenyangze/vim-bitoai',
-
+  {
+    'weilbith/nvim-code-action-menu',
+    cmd = 'CodeActionMenu',
+  },
   {
     'NvChad/nvim-colorizer.lua', --------------------------------------------> needs setup
+    opts = {
+      user_default_options = {
+        tailwind = true,
+      },
+    }
+  },
+
+  {
+    "roobert/tailwindcss-colorizer-cmp.nvim",
+    -- optionally, override the default options:
     config = function()
-      require('colorizer').setup({
-        css = {
-          mode = 'background',
-          tailwind = true,
-          css = true
-        },
+      require("tailwindcss-colorizer-cmp").setup({
+        color_square_width = 2,
       })
     end
   },
@@ -197,7 +293,7 @@ return {
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'lunar',
         component_separators = '|',
         section_separators = '',
       },

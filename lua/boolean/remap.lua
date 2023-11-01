@@ -1,7 +1,7 @@
 -- print('-------------------------------------')
 require("boolean.functions")
-vim.g.mapleader = " "
 
+vim.g.mapleader = " "
 -- Save in insert mode
 vim.api.nvim_set_keymap('i', '<C-s>', '<ESC>:w<CR>a', { silent = true, noremap = true })
 -- Disable highlights
@@ -174,9 +174,11 @@ vim.api.nvim_set_keymap('n', '<leader>q', ':q<CR>',
 -- Colortils Open Editor While On Value
 vim.api.nvim_set_keymap('n', '<leader>o', ':Colortils<CR>', { noremap = true, silent = true })
 
-
 -- ColorPicker
-vim.api.nvim_set_keymap('n', '<leader>cp', ':PickColor<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ct', ':CccToggle<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>cc', ':CccConvert<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>cp', ':CccPick<CR>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>cp', ':PickColor<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', '<leader>ci', ':PickColorInsert<CR>', { noremap = true, silent = true })
 
 vim.api.nvim_set_keymap('n', '<leader>cr', ':ConvertHEXandRGB<CR>', { noremap = true, silent = true })
@@ -192,10 +194,10 @@ vim.api.nvim_set_keymap('n', '<leader>cb', ':%s/\\(\\d\\+\\)deg \\(\\d\\+\\)% \\
 )
 
 -- Focus split
-vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true }) -- focus down split
-vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', { noremap = true, silent = true }) -- focus up split
-vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true }) -- focus left split
-vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { noremap = true, silent = true }) -- focus right split
+-- vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true }) -- focus down split
+-- vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', { noremap = true, silent = true }) -- focus up split
+-- vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true }) -- focus left split
+-- vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', { noremap = true, silent = true }) -- focus right split
 
 -- OPEN FILES / SPLIT / MOVE END ---------------------------------------
 
@@ -263,8 +265,31 @@ end
 -- Tabline toggle
 vim.api.nvim_set_keymap('n', '<leader>bt', ':lua toggle_tabline()<CR>', { silent = true })
 
+-- Move between buffers
+vim.api.nvim_set_keymap('n', '<leader>bn', ':bn<CR>', { silent = true })
+vim.api.nvim_set_keymap('n', '<leader>bp', ':bp<CR>', { silent = true })
+
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
+-- Package-info
+vim.api.nvim_set_keymap("n", "<leader>ns", "<cmd>lua require('package-info').show()<cr>",
+  { silent = true, noremap = true }
+)
+
+vim.api.nvim_set_keymap('v', '<Leader>re', '<Cmd>lua require("react-extract").extract_to_new_file()<CR>',
+  { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<Leader>rc', '<Cmd>lua require("react-extract").extract_to_current_file()<CR>',
+  { noremap = true, silent = true })
+-- React extract
+
+
+-- Unmap <C-k> from luasnip
+vim.api.nvim_set_keymap('s', '<C-k>', '', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('s', '<leader>le', '<Cmd>lua require("luasnip").expand()<CR>', { noremap = true, silent = true })
+
+-- Code Action Menu
+vim.api.nvim_set_keymap('n', '<leader>ca', ':CodeActionMenu<CR>', { noremap = true, silent = true })

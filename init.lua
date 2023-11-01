@@ -28,9 +28,9 @@ require('boolean')
 -- -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-vim.keymap.set('n', 'K', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
+-- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
+-- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+-- vim.keymap.set('n', 'K', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- [[ Configure LSP ]]
@@ -51,20 +51,21 @@ local on_attach = function(_, bufnr)
   end
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>a', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  nmap('<leader>a', vim.lsp.buf.code_action, 'Code [A]ction')
 
-  nmap('<leader>ld', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-  nmap('<leader>lr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('<leader>li', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>lD', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ls', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>lw', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('<leader>ld', require('telescope.builtin').lsp_definitions, '[L]sp [D]efinition')
+  nmap('<leader>lr', require('telescope.builtin').lsp_references, '[L]sp [R]eferences')
+  nmap('<leader>li', require('telescope.builtin').lsp_implementations, '[L]sp [I]mplementation')
+  nmap('<leader>lt', require('telescope.builtin').lsp_type_definitions, '[L]sp [T]ype')
+  nmap('<leader>lds', require('telescope.builtin').lsp_document_symbols, '[L]sp [D]ocument [S]ymbols')
+  nmap('<leader>lws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[L]sp [W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<leader>ls', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
+  nmap('<leader>lR', vim.lsp.buf.rename, '[R]ename')
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
   nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
   nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
@@ -97,7 +98,11 @@ local servers = {
   -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
-  tsserver = {},
+  tsserver = {
+    -- insert typescript.nvim setup here
+
+
+  },
   html = { filetypes = { 'html', 'twig', 'hbs' } },
 
   lua_ls = {
@@ -141,6 +146,11 @@ require('luasnip.loaders.from_vscode').lazy_load()
 luasnip.config.setup {}
 
 cmp.setup {
+  config = {
+    formatting = {
+      format = require('tailwindcss-colorizer-cmp').formatter
+    }
+  },
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
@@ -158,26 +168,8 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      select = false,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp' },

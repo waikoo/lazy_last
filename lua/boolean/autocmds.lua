@@ -5,6 +5,7 @@ vim.api.nvim_exec([[
 augroup MyColors
     autocmd!
     autocmd ColorScheme * lua EnhanceLunar()
+    autocmd BufEnter * lua EnhanceLunar()
     au! FileType bito set syntax=javascript
     autocmd bufwritepost tmux.conf execute ':!tmux source-file %'
     autocmd FileType tmux.conf setlocal noundofile
@@ -34,6 +35,12 @@ function EnhanceLunar()
     vim.api.nvim_set_hl(0, "BufferCurrent", { fg = "#fbd05a", bg = nil })
     vim.api.nvim_set_hl(0, "BufferCurrentSign", { bg = nil })
     vim.api.nvim_set_hl(0, "BufferTabpageFill", { bg = nil })
+    vim.api.nvim_set_hl(0, "DevIconGit", { fg = "#cc5555", bg = nil })
+    vim.api.nvim_set_hl(0, "myTSX", { fg = "#3179c7", bg = nil })
+    vim.api.nvim_set_hl(0, "myLua", { fg = "#a25ce1", bg = nil })
+    vim.api.nvim_set_hl(0, "myCSS", { fg = "#0852e9", bg = nil })
+    vim.api.nvim_set_hl(0, "myJS", { fg = "#ffd838", bg = nil })
+
     -- vim.api.nvim_set_hl(0, "@comments", { fg = "#303030", bg = nil })
   end
 end

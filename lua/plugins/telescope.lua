@@ -17,9 +17,17 @@ return {
     },
   },
   config = function()
+    local actions = require 'telescope.actions'
+    local trouble = require('trouble.providers.telescope')
     local builtin = require('telescope.builtin')
     require('telescope').load_extension('media_files')
     require 'telescope'.setup {
+      defaults = {
+        mappings = {
+          i = { ["<C-t>"] = trouble.open_with_trouble },
+          n = { ["<C-t>"] = trouble.open_with_trouble },
+        }
+      },
       extensions = {
         media_files = {
           -- filetypes whitelist

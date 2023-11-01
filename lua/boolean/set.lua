@@ -24,7 +24,7 @@ vim.cmd([[set nowritebackup]])
 vim.o.showmode = false
 
 -- Lower cmdheight
-vim.o.cmdheight = 0
+vim.o.cmdheight = 1
 
 -- Global status line
 vim.opt.laststatus = 3
@@ -89,8 +89,6 @@ vim.o.smartcase = true
 -- -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
 
--- Wildmenu options
-vim.o.wildmenu = true                  -- Set 'wildmenu' to enable enhanced command-line completion menu
 vim.opt.wildmenu = true                -- Enable wildmenu for enhanced file and directory selection
 vim.opt.wildmode = 'longest:full,full' -- Set wildmode to display matching files and directories
 vim.opt.wildcharm = 26                 -- Set the wildcharm option to a non-printable character (such as <C-Z>) to enable filename completion in command-line mode
@@ -118,10 +116,8 @@ vim.opt.path:append('/home/boolean/.config/zsh')
 -- vim.opt.path:append(os.getenv("PROJECT_DIR"))
 -- vim.wo.foldcolumn = -1
 
--- Modify vim-bitoai plugin configuration
-vim.g.bito_buffer_name_prefix = 'bito_history_'
-vim.g.vim_bito_path = '/usr/local/bin/bito'
-vim.g.vim_bito_prompt_append = 'Please translate the comment into English'
+-- Include cwd and subdirs in path
+vim.api.nvim_set_option('path', vim.fn.getcwd() .. ',**')
 
 -- Cursor settings
 -- vim.opt.cursorcolumn = true
@@ -141,7 +137,7 @@ vim.g.vim_bito_prompt_append = 'Please translate the comment into English'
 --
 -- -- Recommended by netrw docs
 -- vim.cmd('filetype plugin on')
--- vim.cmd('set nocompatible')
+vim.cmd('set nocompatible')
 
 -- -- Automatically run fern when starting neovim in a directory
 -- vim.cmd [[autocmd VimEnter * if isdirectory(expand('%')) | execute 'Fern .' | endif]]
